@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if not request.user.is_authenticated  %}
+    <h1>Sorry ! you need to be logged in </h1>
+  {% else %}
+  <form method="POST" action={% url 'add_post' %} enctype="multipart/form-data">
+    {% csrf_token %}
+  <div class="form-floating">
+    <textarea class="form-control" placeholder="Leave a caption here" id="floatingTextarea2" style="height: 100px" name="caption"></textarea>
+    <label for="floatingTextarea2">Add your caption</label>
+    <input type="file" name="image_upload" accept=".jpg,.png,.jpeg" >
+    <button type="submit" class="btn btn-primary">Post</button>
+  </div>
+  </form>
+  <h1>Posts</h1>
+  {% for post in post_list %}
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <p class="card-text">{{post.caption}}</p>
+      {% if post.image and post.image.url  %}
+        <img src={{post.image.url}} style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        width: 16rem;
+        height: 19rem;" />
+      {% endif %}
+      <br>
+      <blockquote class="blockquote mb-0">
+        <footer class="blockquote-footer">{{post.user.username}}</footer>
+      </blockquote>
+      <br>
+      {% if request.user.id != post.user.id %}
+      <form action="{% url 'like_post' post.id %}" method="GET">
+        {% if post.id in  already_liked_post_ids_of_current_user  %}
+          Already Liked !
+        {% else %}
+          <button type="submit" class="btn btn-primary">Like</button>
+        {% endif %}
+      </form>
+      {% endif %}
+      Nof of Likes : {{post.like_post.count}}
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+{% endblock %}

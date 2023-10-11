@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+    <title>Social Media App</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">Social Media App</a>
+      {% if request.user.is_authenticated %}
+        <a class="p-1 rounded" href="/signout">Sign Out</a>  
+        <a class="p-1 rounded" href="/profile_settings">View my profile settings</a>  
+        <span class="badge bg-secondary">Currently logged in as {{request.user.username}}</span>
+
+      {% else %}
+        <a class="p-1 rounded" href="/signup">Sign Up</a>
+        <a class="p-1 rounded" href="/signin">Sign In</a>
+      {% endif %} 
+    </nav>
+    {% comment %} dynamic content  {% endcomment %}
+    {% block content %} 
+    {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </body>
+</html>

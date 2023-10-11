@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Admin Dashboard</h1>
+  {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{error_msg}}
+    </div>
+    {% endif %}
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Block</th>
+            <th scope="col">Make Admin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in all_users %}
+            <tr>
+                <th scope="row">{{user.id}}</th>
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+                <form method="POST" action="{% url 'block_user' user.id %}">
+                {% csrf_token %}
+                {% if user.is_active == False %}
+                    <td>Already blocked !</td>
+                {% else %}
+                    <td><button type="submit" class="btn btn-outline-danger">Block User</button></td>
+                {% endif %}
+                </form>
+                <form method="POST" action="{% url 'make_admin' user.id %}">
+                    {% csrf_token %}
+                    {% if user.is_superuser == True %}
+                        <td>Already admin !</td>
+                    {% else %}
+                        <td><button type="submit" class="btn btn-outline-primary">Make Admin</button></td>
+                    {% endif %}
+                </form>
+          {% endfor %}
+        </tbody>
+      </table>
+{% endblock %}
